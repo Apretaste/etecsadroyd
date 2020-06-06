@@ -24,14 +24,14 @@ $(function () {
 
 function search() {
 	var search = $('#search').val().trim();
-	var province = $('#province').val().trim();
+	//var province = $('#province').val().trim();
 
 	if (search.length >= 3) {
 		apretaste.send({
 			'command': 'ETECSADROYD BUSCAR',
 			'data': {
 				'search': search,
-				'province': province
+				//'province': province
 			}
 		});
 	} else {
