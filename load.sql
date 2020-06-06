@@ -1,0 +1,5 @@
+LOAD DATA LOCAL INFILE '/path/to/.csv' 
+INTO TABLE `temp_table` 
+FIELDS TERMINATED BY ',' 
+ENCLOSED BY '"'
+LINES TERMINATED BY '\n';

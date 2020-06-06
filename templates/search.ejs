@@ -1,0 +1,20 @@
+<div class="row">
+    <div class="col s12">
+        <p>Buscando por "<%= search %>" en todas las provincias.</p>
+    </div>
+
+    <ul class="collection">
+        <% results.forEach(function(result) { %>
+        <li class="collection-item">
+            <b><%= result.name %></b> - <span><%= result.location %></span><br>
+            <span>+53<%= result.phone %></span>
+        </li>
+        <% }) %>
+    </ul>
+
+    <div class="fixed-action-btn" onclick="apretaste.send({'command': 'ETECSADROYD'})">
+        <a class="btn-floating btn-large green">
+            <i class="large material-icons">arrow_back</i>
+        </a>
+    </div>
+</div>
