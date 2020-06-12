@@ -1,7 +1,3 @@
-.collection-item{
-    border: none !important;
-}
-
-.collection{
-    border: 1px solid transparent !important;
+.collection-item {
+    min-height: 0 !important;
 }
