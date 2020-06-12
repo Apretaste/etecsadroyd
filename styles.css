@@ -1,3 +1,7 @@
 .collection-item {
     min-height: 0 !important;
 }
+
+.spacing-up-down {
+    margin: 100px 0 50px 0;
+}
