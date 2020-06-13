@@ -35,7 +35,7 @@ class Service
 				'text' => 'Su busqueda esta vacía',
 				'button' => ['href' => 'ETECSADROYD', 'caption' => 'Volver']];
 
-			$response->setTemplate('messaje.ejs', $content);
+			$response->setTemplate('message.ejs', $content);
 			return;
 		}
 
@@ -50,7 +50,7 @@ class Service
 				'text' => "No hemos encontrado nada en el directorio para $search, por favor intente con otra busqueda.",
 				'button' => ['href' => 'ETECSADROYD', 'caption' => 'Volver']];
 
-			$response->setTemplate('messaje.ejs', $content);
+			$response->setTemplate('message.ejs', $content);
 			return;
 		}
 

@@ -5,3 +5,8 @@
 .spacing-up-down {
     margin: 100px 0 50px 0;
 }
+
+.collection-item.avatar > i {
+    top: 50%;
+    transform: translateY(-50%);
+}

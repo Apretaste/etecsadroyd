@@ -35,7 +35,7 @@ function search() {
 			}
 		});
 	} else {
-		showToast('Ingrese algo');
+		showToast('Mínimo 3 caracteres');
 	}
 }
 

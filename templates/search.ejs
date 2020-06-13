@@ -1,14 +1,17 @@
 <div class="row">
     <div class="col s12">
-        <p>Buscando por "<%= search %>" en todas las provincias.</p>
+        <div class="chip">
+            <%= search %>
+        </div>
     </div>
 
     <ul class="collection">
         <% results.forEach(function(result) { %>
             <li class="collection-item avatar">
                 <i class="tiny material-icons circle">local_phone</i>
-                <span class="title"><b><%= result.name %></b> - <%= result.location %></span><br>
-                <p class="blue-grey-text">+53<%= result.phone %></p>
+                <p class="blue-grey-text" style="font-size: 18px; font-weight: 500;">+53<%= result.phone %></p>
+                <span class="title"><%= result.name %></span><br>
+                <span><%= result.location %></span><br>
             </li>
         <% }) %>
     </ul>
