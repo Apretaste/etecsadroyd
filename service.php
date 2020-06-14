@@ -54,6 +54,12 @@ class Service
 			return;
 		}
 
+		foreach ($results as &$result){
+			$result->name = ucwords(mb_strtolower($result->name));
+		}
+
+		$search = ucwords(mb_strtolower($search));
+
 		// create response
 		$response->setCache('month');
 		$response->setTemplate('search.ejs', ['search' => $search, 'results' => $results]);

@@ -10,3 +10,10 @@
     top: 50%;
     transform: translateY(-50%);
 }
+
+.chip.tiny {
+    height: 20px;
+    padding: 0 10px;
+    line-height: 20px;
+    font-size: x-small;
+}

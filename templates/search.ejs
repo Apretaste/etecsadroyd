@@ -1,24 +1,24 @@
-<div class="row">
+<div class="row" style="margin-top: 10px;">
     <div class="col s12">
-        <div class="chip">
+        <div class="chip tiny">
             <%= search %>
         </div>
-    </div>
 
-    <ul class="collection">
-        <% results.forEach(function(result) { %>
-            <li class="collection-item avatar">
-                <i class="tiny material-icons circle">local_phone</i>
-                <p class="blue-grey-text" style="font-size: 18px; font-weight: 500;">+53<%= result.phone %></p>
-                <span class="title"><%= result.name %></span><br>
-                <span><%= result.location %></span><br>
-            </li>
-        <% }) %>
-    </ul>
+        <ul class="collection">
+            <% results.forEach(function(result) { %>
+                <li class="collection-item avatar">
+                    <i class="tiny material-icons circle">local_phone</i>
+                    <p class="title">+53<%= result.phone %></p>
+                    <span class="title blue-grey-text"><%= result.name %></span><br>
+                    <span><%= result.location %></span><br>
+                </li>
+            <% }) %>
+        </ul>
 
-    <div class="fixed-action-btn" onclick="apretaste.send({'command': 'ETECSADROYD'})">
-        <a class="btn-floating btn-large green">
-            <i class="large material-icons">arrow_back</i>
-        </a>
+        <div class="fixed-action-btn" onclick="apretaste.send({'command': 'ETECSADROYD'})">
+            <a class="btn-floating btn-large green">
+                <i class="large material-icons">arrow_back</i>
+            </a>
+        </div>
     </div>
 </div>
