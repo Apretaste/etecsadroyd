@@ -27,6 +27,19 @@ function search() {
 	//var province = $('#province').val().trim();
 
 	if (search.length >= 3) {
+		if (search.length > 40) {
+			showToast('Maximo 40 caracteres');
+			return;
+		}
+
+		if (search[0] !== '+' && !isNaN(search) && search.length !== 8) {
+			showToast('Número inválido');
+			return;
+		} else if (search[0] === '+' && (search.substr(0, 3) !== '+53' || search.length !== 11 || isNaN(search.substr(3)))) {
+			showToast('Número inválido');
+			return;
+		}
+
 		apretaste.send({
 			'command': 'ETECSADROYD BUSCAR',
 			'data': {
