@@ -41,20 +41,25 @@ class Service
 
 		$column = "name";
 		$invalidNumber = false;
+		$extraWhere = '';
 
 		if (intval($search[0]) != 0) {
-			if (strlen($search) != 8 || intval($search) == 0) {
-				$invalidNumber = true;
-			}
-
+			$invalidNumber = strlen($search) > 8 || strlen($search) < 6 || intval($search) == 0;
 			$column = 'phone';
 		} else if ($search[0] == '+') {
-			if (substr($search, 0, 3) == '+53' && strlen($search) == 11) {
+			if (substr($search, 0, 3) == '+53' && strlen($search) >= 9 && strlen($search) <= 11) {
 				$search = str_replace('+53', '', $search);
 				$invalidNumber = intval($search) == 0;
 				$column = 'phone';
 			} else $invalidNumber = true;
 		}
+
+		$type = $request->input->data->type ?? 'ALL';
+		$province = $request->input->data->province ?? 'ALL';
+
+		if ($type != 'ALL') $extraWhere .= " AND type='$type'";
+		if ($province != 'ALL') $extraWhere .= " AND province='$province'";
+
 
 		if ($invalidNumber) {
 			$content = [
@@ -68,8 +73,9 @@ class Service
 		}
 
 		$search = strtoupper($search);
+		if ($column == 'phone') $search = implode(' +', explode(' ', $search));
 
-		$results = Database::query("SELECT `name`, phone, 'La Habana' AS location FROM _directory WHERE `$column` LIKE '%$search%' LIMIT 10");
+		$results = Database::query("SELECT `name`, phone, `type`, personal, province, address FROM _directory WHERE MATCH(`$column`) AGAINST('+$search' IN BOOLEAN MODE) $extraWhere LIMIT 10");
 
 		if (empty($results)) {
 			$content = [
@@ -84,6 +90,8 @@ class Service
 
 		foreach ($results as &$result) {
 			$result->name = ucwords(mb_strtolower($result->name));
+			if ($result->personal) unset($result->address);
+			else $result->address = ucwords(mb_strtolower($result->address));
 		}
 
 		$search = ucwords(mb_strtolower($search));

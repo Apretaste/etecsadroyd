@@ -7,10 +7,10 @@
         <ul class="collection">
             <% results.forEach(function(result) { %>
                 <li class="collection-item avatar">
-                    <i class="tiny material-icons circle">local_phone</i>
-                    <p class="title">+53<%= result.phone %></p>
+                    <i class="tiny material-icons circle"><%= result.type == "FIX" ? 'local_phone' : 'phone_android' %></i>
+                    <p class="title"><%= result.phone %></p>
                     <span class="title blue-grey-text"><%= result.name %></span><br>
-                    <span><%= result.location %></span><br>
+                    <span><%= result.personal == 1 || result.address == '' ? provinces[result.province] : result.address %></span><br>
                 </li>
             <% }) %>
         </ul>

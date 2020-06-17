@@ -17,6 +17,8 @@ var provinces = {
 	'ISLA_DE_LA_JUVENTUD': 'Isla de la Juventud'
 };
 
+var types = {'FIX': 'Fijo', 'MOBILE': 'Movil'};
+
 $(function () {
 	$('select').formSelect();
 	M.updateTextFields();
@@ -24,7 +26,8 @@ $(function () {
 
 function search() {
 	var search = $('#search').val().trim();
-	//var province = $('#province').val().trim();
+	var province = $('#province').val();
+	var type = $('#type').val();
 
 	if (search.length >= 3) {
 		if (search.length > 40) {
@@ -32,10 +35,10 @@ function search() {
 			return;
 		}
 
-		if (search[0] !== '+' && !isNaN(search) && search.length !== 8) {
+		if (!isNaN(search) && (search.length > 8 || search.length < 6)) {
 			showToast('Número inválido');
 			return;
-		} else if (search[0] === '+' && (search.substr(0, 3) !== '+53' || search.length !== 11 || isNaN(search.substr(3)))) {
+		} else if (search[0] === '+' && (search.substr(0, 3) !== '+53' || search.length > 11 || search.length < 9 || isNaN(search.substr(3)))) {
 			showToast('Número inválido');
 			return;
 		}
@@ -44,7 +47,8 @@ function search() {
 			'command': 'ETECSADROYD BUSCAR',
 			'data': {
 				'search': search,
-				//'province': province
+				'province': province,
+				'type': type
 			}
 		});
 	} else {
