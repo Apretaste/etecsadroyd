@@ -10,7 +10,7 @@
                     <i class="tiny material-icons circle"><%= result.type == "FIX" ? 'local_phone' : 'phone_android' %></i>
                     <p class="title"><%= result.phone %></p>
                     <span class="title blue-grey-text"><%= result.name %></span><br>
-                    <span><%= result.personal == 1 || result.address == '' ? provinces[result.province] : result.address %></span><br>
+                    <span><%= result.personal == 1 || result.address == '' ? provinces[result.province] : result.address + ', ' + provinces[result.province] %></span><br>
                 </li>
             <% }) %>
         </ul>
