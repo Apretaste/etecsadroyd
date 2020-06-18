@@ -17,7 +17,7 @@ var provinces = {
 	'ISLA_DE_LA_JUVENTUD': 'Isla de la Juventud'
 };
 
-var types = {'FIX': 'Fijo', 'MOBILE': 'Movil'};
+var types = {'FIX': 'Fijo', 'MOBILE': 'Móvil'};
 
 $(function () {
 	$('select').formSelect();
@@ -28,19 +28,22 @@ function search() {
 	var search = $('#search').val().trim();
 	var province = $('#province').val();
 	var type = $('#type').val();
+	var address = $('#address').val().trim();
 
-	if (search.length >= 3) {
-		if (search.length > 40) {
+	if (search.length >= 3 || address !== '') {
+		if (search.length > 40 || address.length > 40) {
 			showToast('Maximo 40 caracteres');
 			return;
 		}
 
-		if (!isNaN(search) && (search.length > 8 || search.length < 6)) {
-			showToast('Número inválido');
-			return;
-		} else if (search[0] === '+' && (search.substr(0, 3) !== '+53' || search.length > 11 || search.length < 9 || isNaN(search.substr(3)))) {
-			showToast('Número inválido');
-			return;
+		if (search !== '') {
+			if (!isNaN(search) && (search.length > 11 || search.length < 3)) {
+				showToast('Número inválido');
+				return;
+			} else if (search[0] === '+' && (search.substr(0, 3) !== '+53' || search.length > 14 || search.length < 6 || isNaN(search.substr(3)))) {
+				showToast('Número inválido');
+				return;
+			}
 		}
 
 		apretaste.send({
@@ -48,7 +51,8 @@ function search() {
 			'data': {
 				'search': search,
 				'province': province,
-				'type': type
+				'type': type,
+				'address': address
 			}
 		});
 	} else {

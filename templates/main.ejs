@@ -1,15 +1,10 @@
 <div class="row">
     <div class="col s12">
         <div class="center-align spacing-up-down">
-            <img class="responsive-img" src="{{APP_SERVICE_PATH}}/images/etecsadroyd.png"/>
+            <img class="responsive-img" src="{{APP_SERVICE_PATH}}/images/etecsadroyd.png" style="width: 160px"/>
         </div>
 
         <div class="row">
-            <div class="col s12">
-                <p style="margin: 0">Bienvenido a Etecsa Droyd, la guía de teléfono de Cuba. Inserte nombre de persona o
-                    negocio.</p>
-            </div>
-
             <div class="input-field col s12">
                 <input id="search" type="text" maxlength="50">
                 <label for="search">Inserte el nombre o número a buscar</label>
@@ -24,6 +19,12 @@
                     <% }) %>
                 </select>
                 <label for="province">Provincia</label>
+            </div>
+
+            <!-- ADDRESS -->
+            <div class="input-field col s12">
+                <input id="address" type="text" maxlength="50">
+                <label for="address">Dirección</label>
             </div>
 
             <!-- PHONE TYPE -->
