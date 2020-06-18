@@ -1,14 +1,34 @@
 <div class="row" style="margin-top: 10px;">
     <div class="col s12">
-        <div class="chip tiny">
-            <%= search %>
-        </div>
+        <% if(search && search != ''){ %>
+            <div class="chip tiny">
+                <%= search %>
+            </div>
+        <% } %>
+
+        <% if(address && address != ''){ %>
+            <div class="chip tiny">
+                <%= address %>
+            </div>
+        <% } %>
+
+        <% if(province != 'ALL'){ %>
+            <div class="chip tiny">
+                <%= provinces[province] %>
+            </div>
+        <% } %>
+
+        <% if(type != 'ALL'){ %>
+            <div class="chip tiny">
+                <%= types[type] %>
+            </div>
+        <% } %>
 
         <ul class="collection">
             <% results.forEach(function(result) { %>
                 <li class="collection-item avatar">
                     <i class="tiny material-icons circle"><%= result.type == "FIX" ? 'local_phone' : 'phone_android' %></i>
-                    <p class="title"><%= result.phone %></p>
+                    <p class="title" style="font-weight: 500"><%= result.phone %></p>
                     <span class="title blue-grey-text"><%= result.name %></span><br>
                     <span><%= result.personal == 1 || result.address == '' ? provinces[result.province] : result.address + ', ' + provinces[result.province] %></span><br>
                 </li>

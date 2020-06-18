@@ -69,7 +69,7 @@ class Service
 				$response->setTemplate('message.ejs', $content);
 				return;
 			}
-		} else $search = $address;
+		}
 
 		$type = $request->input->data->type ?? 'ALL';
 		$province = $request->input->data->province ?? 'ALL';
@@ -78,22 +78,30 @@ class Service
 		if ($province != 'ALL') $extraWhere .= " AND province='$province'";
 
 		$search = strtoupper($search);
-		$searchQuery = $searchQuery = "MATCH(`$column`) AGAINST('+$search' IN BOOLEAN MODE)";
+		if ($column == 'name') $search = implode(' +', explode(' ', $search));
+
+		$searchQuery = "MATCH(`$column`) AGAINST('+$search' IN BOOLEAN MODE)";
+		$addressQuery = '';
 		if ($column == 'phone' && $search) {
-			$search = implode(' +', explode(' ', $search));
 			$searchQuery = "RIGHT(CONCAT(IF(type = 'FIX', code, '53'), phone), LENGTH($search)) = $search";
-		} else if (!empty($address)) {
-			$address = implode(' ,', explode(' ', $address));
-			$searchQuery = " MATCH(`address`) AGAINST('$address') AND personal=0";
 		}
 
-		$results = Database::query("SELECT `name`, phone, `type`, personal, province, address FROM _directory WHERE $searchQuery $extraWhere LIMIT 10");
+		if (!empty($address)) {
+			$address = implode(' ,', explode(' ', $address));
+			$addressQuery = " MATCH(`address`) AGAINST('$address') AND personal=0";
+			if ($search) $addressQuery = 'AND' . $addressQuery;
+		}
+
+		$results = Database::query("SELECT `name`, phone, `type`, personal, province, address FROM _directory WHERE $searchQuery $addressQuery $extraWhere LIMIT 10");
+
+		$search = str_replace('+', '', $search);
+		$address = str_replace(',', '', $address);
 
 		if (empty($results)) {
 			$content = [
 				'header' => '¡Sin resultados!',
 				'icon' => 'sentiment_very_dissatisfied',
-				'text' => "No hemos encontrado nada en el directorio para $search, por favor intente con otra búsqueda.",
+				'text' => "No hemos encontrado nada en el directorio para su busqueda, por favor intente con otra búsqueda.",
 				'button' => ['href' => 'ETECSADROYD', 'caption' => 'Volver']];
 
 			$response->setTemplate('message.ejs', $content);
@@ -108,8 +116,18 @@ class Service
 
 		$search = ucwords(mb_strtolower($search));
 
+		str_replace('+', '', $search);
+
+		$content = [
+			'search' => $search,
+			'province' => $province,
+			'type' => $type,
+			'address' => $address,
+			'results' => $results
+		];
+
 		// create response
 		$response->setCache('month');
-		$response->setTemplate('search.ejs', ['search' => $search, 'results' => $results]);
+		$response->setTemplate('search.ejs', $content);
 	}
 }
