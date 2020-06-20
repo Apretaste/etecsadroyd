@@ -86,8 +86,10 @@ class Service
 		$searchQuery = '';
 		$addressQuery = '';
 		if ($search) {
-			if ($column == 'phone')
-				$searchQuery = "RIGHT(CONCAT(IF(type = 'FIX', code, '53'), phone), LENGTH($search)) = $search";
+			if ($column == 'phone'){
+				$search = str_replace(' ', '', $search);
+				$searchQuery = "RIGHT(CONCAT(IF(type = 'FIX', code, '53'), phone), LENGTH('$search')) = '$search'";
+			}
 			else
 				$searchQuery = "MATCH(`$column`) AGAINST('+$search' IN BOOLEAN MODE)";
 
