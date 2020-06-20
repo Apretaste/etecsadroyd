@@ -80,23 +80,25 @@ class Service
 		if ($type != 'ALL') $extraWhere .= " AND type='$type'";
 		if ($province != 'ALL') $extraWhere .= " AND province='$province'";
 
-		$search = strtoupper($search);
 		if ($column == 'name') $search = implode(' +', explode(' ', $search));
 
 		$searchQuery = '';
 		$addressQuery = '';
 		if ($search) {
-			if ($column == 'phone'){
+			$search = preg_replace('!\s+!', ' ', strtoupper($search));
+
+			if ($column == 'phone') {
 				$search = str_replace(' ', '', $search);
 				$searchQuery = "RIGHT(CONCAT(IF(type = 'FIX', code, '53'), phone), LENGTH('$search')) = '$search'";
-			}
-			else
+			} else {
+				$search = str_replace('  ', '', $search);
 				$searchQuery = "MATCH(`$column`) AGAINST('+$search' IN BOOLEAN MODE)";
-
+			}
 		}
 
 
 		if (!empty($address)) {
+			$address = preg_replace('!\s+!', ' ', $address);
 			$address = implode(' ,', explode(' ', $address));
 			$addressQuery = " MATCH(`address`) AGAINST('$address') AND personal=0";
 			if ($search) $addressQuery = 'AND' . $addressQuery;
