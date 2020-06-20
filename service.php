@@ -27,8 +27,11 @@ class Service
 
 	public function _buscar(Request $request, Response $response)
 	{
-		$search = $request->input->data->search ?? false;
-		$address = $request->input->data->address ?? false;
+		$search = $request->input->data->search;
+		$address = $request->input->data->address;
+
+		if ($search == '') $search = false;
+		if ($address == '') $address = false;
 
 		if (!$search && !$address) {
 			$content = [
