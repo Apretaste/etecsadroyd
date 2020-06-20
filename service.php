@@ -80,8 +80,6 @@ class Service
 		if ($type != 'ALL') $extraWhere .= " AND type='$type'";
 		if ($province != 'ALL') $extraWhere .= " AND province='$province'";
 
-		if ($column == 'name') $search = implode(' +', explode(' ', $search));
-
 		$searchQuery = '';
 		$addressQuery = '';
 		if ($search) {
@@ -90,8 +88,8 @@ class Service
 			if ($column == 'phone') {
 				$search = str_replace(' ', '', $search);
 				$searchQuery = "RIGHT(CONCAT(IF(type = 'FIX', code, '53'), phone), LENGTH('$search')) = '$search'";
-			} else {
-				$search = str_replace('  ', '', $search);
+			} else if ($column == 'name') {
+				$search = implode(' +', explode(' ', $search));
 				$searchQuery = "MATCH(`$column`) AGAINST('+$search' IN BOOLEAN MODE)";
 			}
 		}
