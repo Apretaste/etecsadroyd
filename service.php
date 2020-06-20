@@ -83,11 +83,16 @@ class Service
 		$search = strtoupper($search);
 		if ($column == 'name') $search = implode(' +', explode(' ', $search));
 
-		$searchQuery = "MATCH(`$column`) AGAINST('+$search' IN BOOLEAN MODE)";
+		$searchQuery = '';
 		$addressQuery = '';
-		if ($column == 'phone' && $search) {
-			$searchQuery = "RIGHT(CONCAT(IF(type = 'FIX', code, '53'), phone), LENGTH($search)) = $search";
+		if ($search) {
+			if ($column == 'phone')
+				$searchQuery = "RIGHT(CONCAT(IF(type = 'FIX', code, '53'), phone), LENGTH($search)) = $search";
+			else
+				$searchQuery = "MATCH(`$column`) AGAINST('+$search' IN BOOLEAN MODE)";
+
 		}
+
 
 		if (!empty($address)) {
 			$address = implode(' ,', explode(' ', $address));
