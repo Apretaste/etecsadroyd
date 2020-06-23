@@ -84,21 +84,23 @@ class Service
 		$addressQuery = '';
 		if ($search) {
 			$search = preg_replace('!\s+!', ' ', strtoupper($search));
+			$escapedSearch = Database::escape($search);
 
 			if ($column == 'phone') {
-				$search = str_replace(' ', '', $search);
-				$searchQuery = "RIGHT(CONCAT(IF(type = 'FIX', code, '53'), phone), LENGTH('$search')) = '$search'";
+				$escapedSearch = str_replace(' ', '', $escapedSearch);
+				$searchQuery = "RIGHT(CONCAT(IF(type = 'FIX', code, '53'), phone), LENGTH('$escapedSearch')) = '$escapedSearch'";
 			} else if ($column == 'name') {
-				$search = implode(' +', explode(' ', $search));
-				$searchQuery = "MATCH(`$column`) AGAINST('+$search' IN BOOLEAN MODE)";
+				$escapedSearch = implode(' +', explode(' ', $escapedSearch));
+				$searchQuery = "MATCH(`$column`) AGAINST('+$escapedSearch' IN BOOLEAN MODE)";
 			}
 		}
 
 
 		if (!empty($address)) {
 			$address = preg_replace('!\s+!', ' ', $address);
-			$address = implode(' ,', explode(' ', $address));
-			$addressQuery = " MATCH(`address`) AGAINST('$address') AND personal=0";
+			$escapedAddress = Database::escape($address);
+			$escapedAddress = implode(' ,', explode(' ', $escapedAddress));
+			$addressQuery = " MATCH(`address`) AGAINST('$escapedAddress') AND personal=0";
 			if ($search) $addressQuery = 'AND' . $addressQuery;
 		}
 
