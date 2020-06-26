@@ -31,7 +31,10 @@ class Service
 		$address = $request->input->data->address;
 
 		if ($search == '') $search = false;
+		else $search = preg_replace('/[^[:alnum:][:space:]]/u', '', $search);
+
 		if ($address == '') $address = false;
+		else $address = preg_replace('/[^[:alnum:][:space:]]/u', '', $address);
 
 		if (!$search && !$address) {
 			$content = [
