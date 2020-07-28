@@ -1,9 +1,10 @@
 {
 	"name": "etecsadroyd",
-	"description": "Directorio telefonico de ETECSA",
-	"category": "comunicaciones",
+	"description": "Directorio telefónico de ETECSA",
+	"category": "informativo",
 	"creator": "ricardo@apretaste.org",
 	"listed": true,
 	"guest": true,
-	"caption": "EtecsaDroyd"
+	"caption": "EtecsaDroyd",
+	"icon": "fas fa-phone"
 }

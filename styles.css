@@ -1,19 +1,31 @@
-.collection-item {
-    min-height: 0 !important;
-}
+/* COLLECTIONS */
 
-.spacing-up-down {
-    margin: 100px 0 50px 0;
+.collection-item {
+	min-height: 0 !important;
 }
 
 .collection-item.avatar > i {
-    top: 50%;
-    transform: translateY(-50%);
+	top: 50%;
+	transform: translateY(-50%);
 }
 
+/* TAGS */
+
 .chip.tiny {
-    height: 20px;
-    padding: 0 10px;
-    line-height: 20px;
-    font-size: x-small;
+	height: 20px;
+	padding: 0 10px;
+	line-height: 20px;
+	font-size: x-small;
+}
+
+/* HOME SCREEN */
+
+.home .main-icon {
+	margin: 20% 0px 20px 0px;;
+}
+
+/* FLOAT BUTTON */
+
+.bottom-space {
+	margin-bottom: 80px;
 }
