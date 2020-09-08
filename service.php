@@ -7,19 +7,15 @@ use Framework\Database;
 
 class Service
 {
-
 	/**
 	 * Main function
 	 *
 	 * @param Request $request
 	 * @param Response $response
-	 *
-	 * @throws \Framework\Alert
 	 * @author salvipascual
 	 */
 	public function _main(Request $request, Response $response)
 	{
-
 		// create response
 		$response->setCache('year');
 		$response->setTemplate('main.ejs', []);
