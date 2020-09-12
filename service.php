@@ -1,9 +1,9 @@
 <?php
 
-use Framework\Core;
 use Apretaste\Request;
 use Apretaste\Response;
 use Framework\Database;
+use Apretaste\Challenges;
 
 class Service
 {
@@ -23,16 +23,20 @@ class Service
 
 	public function _buscar(Request $request, Response $response)
 	{
-		$search = $request->input->data->search;
-		$address = $request->input->data->address;
+		$search = $request->input->data->search ?? '';
+		$address = $request->input->data->address ?? '';
+		$type = $request->input->data->type ?? 'ALL';
+		$province = $request->input->data->province ?? 'ALL';
 
-		if ($search == '') $search = false;
-		else $search = preg_replace('/[^[:alnum:][:space:]]/u', '', $search);
+		// clear input texts
+		$cleaner = function ($str) {
+			return preg_replace('/[^[:alnum:][:space:]]/u', '', $str);
+		};
 
-		if ($address == '') $address = false;
-		else $address = preg_replace('/[^[:alnum:][:space:]]/u', '', $address);
+		$search = $cleaner($search);
+		$address = $cleaner($address);
 
-		if (!$search && !$address) {
+		if (empty($search.$address)) {
 			$content = [
 				'header' => 'Busqueda vacía',
 				'icon' => 'warning',
@@ -53,12 +57,14 @@ class Service
 			if (intval($search[0]) != 0) {
 				$invalidNumber = strlen($search) > 11 || strlen($search) < 3 || intval($search) == 0;
 				$column = 'phone';
-			} else if ($search[0] == '+') {
+			} elseif ($search[0] == '+') {
 				if (substr($search, 0, 3) == '+53' && strlen($search) >= 6 && strlen($search) <= 14) {
 					$search = str_replace('+53', '', $search);
 					$invalidNumber = intval($search) == 0;
 					$column = 'phone';
-				} else $invalidNumber = true;
+				} else {
+					$invalidNumber = true;
+				}
 			}
 
 			if ($invalidNumber) {
@@ -73,11 +79,8 @@ class Service
 			}
 		}
 
-		$type = $request->input->data->type ?? 'ALL';
-		$province = $request->input->data->province ?? 'ALL';
-
-		if ($type != 'ALL') $extraWhere .= " AND type='$type'";
-		if ($province != 'ALL') $extraWhere .= " AND province='$province'";
+		$extraWhere .= $type != 'ALL' ? " AND type = '$type'": "";
+		$extraWhere .= $province != 'ALL' ? " AND province = '$province'": "";
 
 		$searchQuery = '';
 		$addressQuery = '';
@@ -88,7 +91,7 @@ class Service
 			if ($column == 'phone') {
 				$escapedSearch = str_replace(' ', '', $escapedSearch);
 				$searchQuery = "RIGHT(CONCAT(IF(type = 'FIX', code, '53'), phone), LENGTH('$escapedSearch')) = '$escapedSearch'";
-			} else if ($column == 'name') {
+			} elseif ($column == 'name') {
 				$escapedSearch = implode(' +', explode(' ', $escapedSearch));
 				$searchQuery = "MATCH(`$column`) AGAINST('+$escapedSearch' IN BOOLEAN MODE)";
 			}
@@ -100,7 +103,9 @@ class Service
 			$escapedAddress = Database::escape($address);
 			$escapedAddress = implode(' ,', explode(' ', $escapedAddress));
 			$addressQuery = " MATCH(`address`) AGAINST('$escapedAddress') AND personal=0";
-			if ($search) $addressQuery = 'AND' . $addressQuery;
+			if ($search) {
+				$addressQuery = 'AND' . $addressQuery;
+			}
 		}
 
 		$results = Database::query("SELECT `name`, phone, `type`, personal, province, address FROM _directory WHERE $searchQuery $addressQuery $extraWhere LIMIT 10");
@@ -121,8 +126,11 @@ class Service
 
 		foreach ($results as &$result) {
 			$result->name = ucwords(mb_strtolower($result->name));
-			if ($result->personal) unset($result->address);
-			else $result->address = ucwords(mb_strtolower($result->address));
+			if ($result->personal) {
+				unset($result->address);
+			} else {
+				$result->address = ucwords(mb_strtolower($result->address));
+			}
 		}
 
 		$search = ucwords(mb_strtolower($search));
@@ -136,6 +144,8 @@ class Service
 			'address' => $address,
 			'results' => $results
 		];
+
+		Challenges::complete('search-etecsa', $request->person->id);
 
 		// create response
 		$response->setCache('month');
