@@ -86,7 +86,7 @@ class Service
 		$addressQuery = '';
 		if ($search) {
 			$search = preg_replace('!\s+!', ' ', strtoupper($search));
-			$search = trim(str_replace('+','', $search);
+			$search = trim(str_replace('+','', $search));
 			$escapedSearch = Database::escape($search);
 
 			if ($column == 'phone') {
